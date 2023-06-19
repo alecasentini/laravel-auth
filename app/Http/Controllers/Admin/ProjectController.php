@@ -37,7 +37,19 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'name' => 'required|unique:projects',
+                'description' => 'required',
+            ],
+            [
+                'name.required' => 'Il campo Name deve essere compilato',
+                'name.unique' => 'Esiste già un project con quel nome',
+                'description.required' => 'Il campo Description deve essere compilato',
+            ]
+        );
+
+        $data = $request->all();
     }
 
     /**
