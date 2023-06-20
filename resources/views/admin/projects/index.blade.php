@@ -7,6 +7,8 @@ Portfolio | Project Index
 @section('content')
 <h1>Tutti i projects</h1>
 
+<a class="btn btn-primary" href="{{route ('admin.projects.create') }}">Create Project</a>
+
 <div class="table-responsive">
     <table>
         <thead>

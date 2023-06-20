@@ -10,6 +10,8 @@ Portfolio | Project Show
 <p>
     Descrizione: {{$project->description}}
 </p>
-<p>Cliente: {{$project->client}}</p>
+<p>
+    Cliente: {{$project->client}}
+</p>
 
 @endsection

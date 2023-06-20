@@ -26,7 +26,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -48,8 +48,17 @@ class ProjectController extends Controller
                 'description.required' => 'Il campo Description deve essere compilato',
             ]
         );
+        $form_data = $request->all();
 
-        $data = $request->all();
+        $slug = Project::generateSlug($request->name);
+
+        $form_data['slug'] = $slug;
+
+        $new_project = new Project();
+        $new_project->fill($form_data);
+        $new_project->save();
+
+        return redirect()->route('admin.projects.index');
     }
 
     /**
