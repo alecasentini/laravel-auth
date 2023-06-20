@@ -58,7 +58,7 @@ class ProjectController extends Controller
         $new_project->fill($form_data);
         $new_project->save();
 
-        return redirect()->route('admin.projects.index');
+        return redirect()->route('admin.projects.index')->with('success', "Project $new_project->name creato");;
     }
 
     /**
@@ -78,9 +78,9 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
@@ -90,9 +90,29 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        $request->validate(
+            [
+                'name' => 'required|unique:projects,name,' . $project->id,
+                'description' => 'required',
+            ],
+            [
+                'name.required' => 'Il campo Name deve essere compilato',
+                'name.unique' => 'Esiste già un project con quel nome',
+                'description.required' => 'Il campo Description deve essere compilato',
+            ]
+        );
+
+        $form_data = $request->all();
+
+        $slug = Project::generateSlug($request->name);
+
+        $form_data['slug'] = $slug;
+
+        $project->update($form_data);
+
+        return redirect()->route('admin.projects.index')->with('success', "Project $project->name modificato");
     }
 
     /**

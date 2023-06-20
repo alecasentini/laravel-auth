@@ -7,6 +7,12 @@ Portfolio | Project Index
 @section('content')
 <h1>Tutti i projects</h1>
 
+@if (Session::has('success'))
+<div class="alert alert-success">
+    {!!Session::get('success')!!}
+</div>
+@endif
+
 <a class="btn btn-primary" href="{{route ('admin.projects.create') }}">Create Project</a>
 
 <div class="table-responsive">
@@ -21,7 +27,7 @@ Portfolio | Project Index
         </thead>
         <tbody>
             @forelse ($projects as $project)
-            <tr>
+            <tr class="mb-3">
                 <td>{{ $project->name }}</td>
                 <td>{{ $project->client }}</td>
                 <td>{{ $project->description }}</td>
@@ -30,8 +36,9 @@ Portfolio | Project Index
                     <form action="{{ route('admin.projects.destroy', $project) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger my-1">Delete</button>
                     </form>
+                    <a href="{{ route('admin.projects.edit', $project) }}" class="btn btn-warning">Edit</a>
                 </td>
             </tr>
             @empty
