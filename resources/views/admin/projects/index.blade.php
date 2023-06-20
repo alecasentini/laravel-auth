@@ -27,6 +27,11 @@ Portfolio | Project Index
                 <td>{{ $project->description }}</td>
                 <td>
                     <a href="{{route ('admin.projects.show', $project)}}">Show</a>
+                    <form action="{{ route('admin.projects.destroy', $project) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
             @empty
