@@ -14,6 +14,7 @@ Portfolio | Project Index
                 <th scope="col">Name</th>
                 <th scope="col">Client</th>
                 <th scope="col">Description</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,9 @@ Portfolio | Project Index
                 <td>{{ $project->name }}</td>
                 <td>{{ $project->client }}</td>
                 <td>{{ $project->description }}</td>
+                <td>
+                    <a href="{{route ('admin.projects.show', $project)}}">Show</a>
+                </td>
             </tr>
             @empty
             <tr>
