@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Project;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 
 class ProjectController extends Controller
 {
@@ -35,28 +37,32 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $request->validate(
-            [
-                'name' => 'required|unique:projects',
-                'description' => 'required',
-            ],
-            [
-                'name.required' => 'Il campo Name deve essere compilato',
-                'name.unique' => 'Esiste già un project con quel nome',
-                'description.required' => 'Il campo Description deve essere compilato',
-            ]
-        );
-        $form_data = $request->all();
+        // $request->validate(
+        //     [
+        //         'name' => 'required|unique:projects',
+        //         'description' => 'required',
+        //     ],
+        //     [
+        //         'name.required' => 'Il campo Name deve essere compilato',
+        //         'name.unique' => 'Esiste già un project con quel nome',
+        //         'description.required' => 'Il campo Description deve essere compilato',
+        //     ]
+        // );
+        // $form_data = $request->all();
+
+        $form_data = $request->validated();
 
         $slug = Project::generateSlug($request->name);
 
         $form_data['slug'] = $slug;
 
-        $new_project = new Project();
-        $new_project->fill($form_data);
-        $new_project->save();
+        $new_project = Project::create($form_data);
+
+        // $new_project = new Project();
+        // $new_project->fill($form_data);
+        // $new_project->save();
 
         return redirect()->route('admin.projects.index')->with('success', "Project $new_project->name creato");;
     }
@@ -90,21 +96,22 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        $request->validate(
-            [
-                'name' => 'required|unique:projects,name,' . $project->id,
-                'description' => 'required',
-            ],
-            [
-                'name.required' => 'Il campo Name deve essere compilato',
-                'name.unique' => 'Esiste già un project con quel nome',
-                'description.required' => 'Il campo Description deve essere compilato',
-            ]
-        );
+        // $request->validate(
+        //     [
+        //         'name' => 'required|unique:projects,name,' . $project->id,
+        //         'description' => 'required',
+        //     ],
+        //     [
+        //         'name.required' => 'Il campo Name deve essere compilato',
+        //         'name.unique' => 'Esiste già un project con quel nome',
+        //         'description.required' => 'Il campo Description deve essere compilato',
+        //     ]
+        // );
 
-        $form_data = $request->all();
+        // $form_data = $request->all();
+        $form_data = $request->validated();
 
         $slug = Project::generateSlug($request->name);
 
@@ -125,6 +132,6 @@ class ProjectController extends Controller
     {
         $project->delete();
 
-        return redirect()->route('admin.projects.index');
+        return redirect()->route('admin.projects.index')->with('success', "Project $project->name cancellato");
     }
 }
