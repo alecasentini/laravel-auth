@@ -7,7 +7,7 @@ Portfolio | Project Edit
 @section('content')
 <h1>Modifica Projects: {{$project->name}}</h1>
 
-<form action="{{route ('admin.projects.update', $project)}}" method="POST">
+<form action="{{route ('admin.projects.update', $project)}}" method="POST" enctype="multipart/form-data">
     @csrf
     @method ('PUT')
     <div class="form-group mb-3">
@@ -28,6 +28,14 @@ Portfolio | Project Edit
         <label for="client" class="form-label @error('client') is-invalid @enderror">Client</label>
 
         <input type="text" name="client" id="client" class="form-control" value="{{old ('client') ?? $project->client }}">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="project-cover-image" class="form-label @error('cover_image') is-invalid @enderror">Cover Image</label>
+        @error('cover_image')
+        <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+        <input type="file" name="cover_image" id="project-cover-image" class="form-control">
     </div>
 
 

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 
+use Illuminate\Support\Facades\Storage;
+
 class ProjectController extends Controller
 {
     /**
@@ -57,6 +59,11 @@ class ProjectController extends Controller
         $slug = Project::generateSlug($request->name);
 
         $form_data['slug'] = $slug;
+
+        if ($request->hasFile('cover_image')) {
+            $path = Storage::disk('public')->put('project_images', $request->cover_image);
+            $form_data['cover_image'] = $path;
+        }
 
         $new_project = Project::create($form_data);
 
@@ -117,6 +124,15 @@ class ProjectController extends Controller
 
         $form_data['slug'] = $slug;
 
+        if ($request->hasFile('cover_image')) {
+            if ($project->cover_image) {
+                Storage::delete($project->cover_image);
+            }
+
+            $path = Storage::disk('public')->put('project_images', $request->cover_image);
+            $form_data['cover_image'] = $path;
+        }
+
         $project->update($form_data);
 
         return redirect()->route('admin.projects.index')->with('success', "Project $project->name modificato");
@@ -130,6 +146,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+
+        if ($project->cover_image) {
+            Storage::delete($project->cover_image);
+        }
         $project->delete();
 
         return redirect()->route('admin.projects.index')->with('success', "Project $project->name cancellato");

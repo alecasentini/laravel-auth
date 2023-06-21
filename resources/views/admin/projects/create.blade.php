@@ -7,7 +7,7 @@ Portfolio | Project Create
 @section('content')
 <h1>Creazione nuovo Projects</h1>
 
-<form action="{{route ('admin.projects.store')}}" method="POST">
+<form action="{{route ('admin.projects.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group mb-3">
         <label for="name" class="form-label @error('name') is-invalid @enderror">Name</label>
@@ -23,10 +23,19 @@ Portfolio | Project Create
         @enderror
         <textarea name="description" id="description" class="form-control" rows="5"></textarea>
     </div>
+
     <div class="form-group mb-3">
         <label for="client" class="form-label @error('client') is-invalid @enderror">Client</label>
 
         <input type="text" name="client" id="client" class="form-control">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="project-cover-image" class="form-label @error('cover_image') is-invalid @enderror">Cover Image</label>
+        @error('cover_image')
+        <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+        <input type="file" name="cover_image" id="project-cover-image" class="form-control">
     </div>
 
 

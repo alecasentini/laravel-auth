@@ -28,6 +28,18 @@ class StoreProjectRequest extends FormRequest
             'name' => ['required', Rule::unique('projects')->ignore($this->project)],
             'description' => ['required'],
             'client' => ['nullable'],
+            'cover_image' => ['nullable', 'image', 'max:2000'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Il campo Name deve essere compilato',
+            'name.unique' => 'Esiste già un project con quel nome',
+            'description.required' => 'Il campo Description deve essere compilato',
+            'cover_image.image' => 'Devi caricare un file image',
+            'cover_image.max' => 'Il file caricato non deve superare i 2000 KB'
         ];
     }
 }
